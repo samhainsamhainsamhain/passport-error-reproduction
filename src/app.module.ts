@@ -6,8 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 
-import { User } from './typeorm/entities/User';
-import { Session } from './typeorm/entities/Session';
+import MysqlDataSource from './typeorm/MySQLDataSource';
+import entities from './typeorm/Entities';
 
 @Module({
   imports: [
@@ -15,13 +15,8 @@ import { Session } from './typeorm/entities/Session';
     UsersModule,
     PassportModule.register({ session: true }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'admin',
-      password: 'admin',
-      database: 'testserver',
-      entities: [User, Session],
+      ...MysqlDataSource.options,
+      entities,
       synchronize: true,
     }),
   ],
